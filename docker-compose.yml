@@ -1,0 +1,40 @@
+version: '3.3'
+networks:
+  microservice:
+    external:
+      name: microservice
+
+services: 
+  consul-node1:
+    image: progrium/consul
+    restart: always
+    networks:      
+      - microservice
+    volumes: 
+      - /mnt/consul/node1:/data
+    ports:
+      - "8300:8300"
+      - "8301:8301"   
+      - "8302:8302" 
+      - "8400:8400"
+      - "8500:8500"
+      - "8553:53/udp"
+    deploy:
+      replicas: 1  
+      restart_policy:
+        condition: any
+      resources:
+        limits:
+          cpus: "0.4"
+          memory: 500M
+    command: -server -advertise "192.168.109.223"  -bootstrap-expect 1
+  registrator:    
+    image: gliderlabs/registrator:latest
+    restart: always
+    networks:      
+      - microservice
+    volumes: 
+     - /var/run/docker.sock:/tmp/docker.sock
+    deploy:
+      mode: global
+    command: -cleanup -resync=10 --internal consul://consul-node1:8500
