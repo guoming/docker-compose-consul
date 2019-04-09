@@ -1,8 +1,7 @@
-﻿mkdir -p /mnt/consul/node1
-mkdir -p /mnt/consul/node2
-mkdir -p /mnt/consul/node3
+﻿mkdir -p /mnt/consul
+chmod 777 /mnt/consul
 
-chmod 777 /mnt/consul/node1
-chmod 777 /mnt/consul/node2
-chmod 777 /mnt/consul/node3
+
+docker node update --label-add consul=node1 sz-new-test
+docker node update --label-add consul=node2 sz-itdev4
 docker stack deploy --compose-file docker-compose.yml consul
