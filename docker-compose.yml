@@ -5,63 +5,107 @@ networks:
       name: microservice
 
 services: 
-  consul-node1:
-    image: progrium/consul
+  consul-dc1-node1:
+    image: consul
     restart: always
-    networks:      
-      - microservice
-    volumes: 
-      - /mnt/consul:/data
-    ports:
-      - "8300:8300"
-      - "8301:8301"   
-      - "8302:8302" 
-      - "8400:8400"
-      - "8500:8500"
-      - "8553:53/udp"
     deploy:
-      placement:
-        constraints: [node.labels.consul==node1]
       replicas: 1  
       restart_policy:
         condition: any        
       resources:
         limits:
-          cpus: "0.4"
-          memory: 500M
-    command: -server -client=0.0.0.0 -bootstrap-expect 1 -node=consul-node1
-  consul-node2:
-    image: progrium/consul
+          cpus: "0.1"
+          memory: 100M
+    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --bootstrap-expect=1
+  consul-dc1-node2:
+    image: consul
     restart: always
-    networks:      
-      - microservice
-    volumes: 
-      - /mnt/consul:/data
-    ports:
-      - "28300:8300"
-      - "28301:8301"   
-      - "28302:8302" 
-      - "28400:8400"
-      - "28500:8500"
-      - "28553:53/udp"
     deploy:
-      placement:
-        constraints: [node.labels.consul==node2]
       replicas: 1  
       restart_policy:
-        condition: any
+        condition: any        
       resources:
         limits:
-          cpus: "0.4"
-          memory: 500M
-    command: -server -client=0.0.0.0 -retry-join consul-node1 -node=consul-node2
+          cpus: "0.1"
+          memory: 100M
+    depends_on:
+      - consul-dc1-node1
+    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --join consul-dc1-node1
+  consul-dc1-node3:
+    image: consul
+    restart: always
+    deploy:
+      replicas: 1  
+      restart_policy:
+        condition: any        
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 100M
+    depends_on:
+      - consul-dc1-node1
+    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --join consul-dc1-node1
+  consul-dc1-node4:
+    image: consul
+    restart: always
+    ports:
+     - 8500:8500
+    deploy:
+      replicas: 1  
+      restart_policy:
+        condition: any        
+    depends_on:
+      - consul-dc1-node1
+    command: agent --server=false --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --join consul-dc1-node4
+  consul-dc2-node1:
+    image: consul
+    restart: always
+    deploy:
+      replicas: 1  
+      restart_policy:
+        condition: any        
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 100M
+    depends_on:
+      - consul-dc1-node1
+    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc2 --bootstrap-expect=1
+  consul-dc2-node2:
+    image: consul
+    restart: always
+    deploy:
+      replicas: 1  
+      restart_policy:
+        condition: any        
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 100M
+    depends_on:
+      - consul-dc2-node1
+    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc2 --join consul-dc2-node1
+  consul-dc2-node3:
+    image: consul
+    restart: always
+    deploy:
+      replicas: 1  
+      restart_policy:
+        condition: any        
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 100M
+    depends_on:
+      - consul-dc2-node1
+    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc2 --join consul-dc2-node1
   registrator:    
     image: gliderlabs/registrator:latest
     restart: always
-    networks:      
-      - microservice
     volumes: 
      - /var/run/docker.sock:/tmp/docker.sock
     deploy:
       mode: global
-    command: -cleanup -resync=10 --internal consul://consul-node1:8500
+    depends_on:
+      - consul-dc1-node4
+    command: -cleanup -resync=10 --internal consul://consul-dc1-node4:8500
