@@ -1,1 +1,4 @@
-"# Docker-Consul-Example" 
+Run with:
+``` SHELL
+./start.sh
+```

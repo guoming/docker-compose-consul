@@ -1,33 +1,17 @@
-version: '3.3'
-networks:
-  microservice:
-    external:
-      name: microservice
+version: '3.5'
 
 services: 
   consul-dc1-node1:
     image: consul
     restart: always
     deploy:
-      replicas: 1  
-      restart_policy:
-        condition: any        
-      resources:
-        limits:
-          cpus: "0.1"
-          memory: 100M
+      replicas: 1 
     command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --bootstrap-expect=1
   consul-dc1-node2:
     image: consul
     restart: always
     deploy:
-      replicas: 1  
-      restart_policy:
-        condition: any        
-      resources:
-        limits:
-          cpus: "0.1"
-          memory: 100M
+      replicas: 1     
     depends_on:
       - consul-dc1-node1
     command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --join consul-dc1-node1
@@ -35,13 +19,7 @@ services:
     image: consul
     restart: always
     deploy:
-      replicas: 1  
-      restart_policy:
-        condition: any        
-      resources:
-        limits:
-          cpus: "0.1"
-          memory: 100M
+      replicas: 1       
     depends_on:
       - consul-dc1-node1
     command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --join consul-dc1-node1
@@ -51,9 +29,7 @@ services:
     ports:
      - 8500:8500
     deploy:
-      replicas: 1  
-      restart_policy:
-        condition: any        
+      replicas: 1        
     depends_on:
       - consul-dc1-node1
     command: agent --server=false --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --join consul-dc1-node4
@@ -61,13 +37,7 @@ services:
     image: consul
     restart: always
     deploy:
-      replicas: 1  
-      restart_policy:
-        condition: any        
-      resources:
-        limits:
-          cpus: "0.1"
-          memory: 100M
+      replicas: 1 
     depends_on:
       - consul-dc1-node1
     command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc2 --bootstrap-expect=1
@@ -75,13 +45,7 @@ services:
     image: consul
     restart: always
     deploy:
-      replicas: 1  
-      restart_policy:
-        condition: any        
-      resources:
-        limits:
-          cpus: "0.1"
-          memory: 100M
+      replicas: 1      
     depends_on:
       - consul-dc2-node1
     command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc2 --join consul-dc2-node1
@@ -89,13 +53,7 @@ services:
     image: consul
     restart: always
     deploy:
-      replicas: 1  
-      restart_policy:
-        condition: any        
-      resources:
-        limits:
-          cpus: "0.1"
-          memory: 100M
+      replicas: 1       
     depends_on:
       - consul-dc2-node1
     command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc2 --join consul-dc2-node1
