@@ -1,11 +1,17 @@
 version: '3.5'
+networks:
+  consul:
+    external:
+      name: consul
 
 services: 
   consul-dc1-node1:
     image: consul
     restart: always
     deploy:
-      replicas: 1 
+      replicas: 1
+    networks:
+      - consul
     command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --bootstrap-expect=1
   consul-dc1-node2:
     image: consul
@@ -14,6 +20,8 @@ services:
       replicas: 1     
     depends_on:
       - consul-dc1-node1
+    networks:
+      - consul
     command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --join consul-dc1-node1
   consul-dc1-node3:
     image: consul
@@ -22,6 +30,8 @@ services:
       replicas: 1       
     depends_on:
       - consul-dc1-node1
+    networks:
+      - consul
     command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --join consul-dc1-node1
   consul-dc1-node4:
     image: consul
@@ -32,6 +42,8 @@ services:
       replicas: 1        
     depends_on:
       - consul-dc1-node1
+    networks:
+      - consul
     command: agent --server=false --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --join consul-dc1-node4
   consul-dc2-node1:
     image: consul
@@ -40,6 +52,8 @@ services:
       replicas: 1 
     depends_on:
       - consul-dc1-node1
+    networks:
+      - consul
     command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc2 --bootstrap-expect=1
   consul-dc2-node2:
     image: consul
@@ -48,6 +62,8 @@ services:
       replicas: 1      
     depends_on:
       - consul-dc2-node1
+    networks:
+      - consul
     command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc2 --join consul-dc2-node1
   consul-dc2-node3:
     image: consul
@@ -56,6 +72,8 @@ services:
       replicas: 1       
     depends_on:
       - consul-dc2-node1
+    networks:
+      - consul
     command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc2 --join consul-dc2-node1
   registrator:    
     image: gliderlabs/registrator:latest
@@ -66,4 +84,6 @@ services:
       mode: global
     depends_on:
       - consul-dc1-node4
+    networks:
+      - consul
     command: -cleanup -resync=10 --internal consul://consul-dc1-node4:8500
