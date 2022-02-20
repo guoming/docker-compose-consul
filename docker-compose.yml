@@ -22,7 +22,7 @@ services:
       - consul-dc1-node1
     networks:
       - consul
-    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --join consul-dc1-node1
+    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --join consul-dc1-node1 -rejoin
   consul-dc1-node3:
     image: consul
     restart: always
@@ -32,7 +32,7 @@ services:
       - consul-dc1-node1
     networks:
       - consul
-    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --join consul-dc1-node1
+    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --join consul-dc1-node1 -rejoin
   consul-dc1-node4:
     image: consul
     restart: always
@@ -44,7 +44,7 @@ services:
       - consul-dc1-node1
     networks:
       - consul
-    command: agent --server=false --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --join consul-dc1-node4
+    command: agent --server=false --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --join consul-dc1-node4 -rejoin
   consul-dc2-node1:
     image: consul
     restart: always
@@ -64,7 +64,7 @@ services:
       - consul-dc2-node1
     networks:
       - consul
-    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc2 --join consul-dc2-node1
+    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc2 --join consul-dc2-node1 -rejoin
   consul-dc2-node3:
     image: consul
     restart: always
@@ -74,7 +74,7 @@ services:
       - consul-dc2-node1
     networks:
       - consul
-    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc2 --join consul-dc2-node1
+    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc2 --join consul-dc2-node1 -rejoin
   registrator:    
     image: gliderlabs/registrator:latest
     restart: always
