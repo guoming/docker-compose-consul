@@ -10,6 +10,10 @@ services:
     restart: always
     deploy:
       replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: "256M"
     networks:
       - consul
     command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --bootstrap-expect=1
@@ -17,7 +21,11 @@ services:
     image: consul
     restart: always
     deploy:
-      replicas: 1     
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: "256M"  
     depends_on:
       - consul-dc1-node1
     networks:
@@ -27,7 +35,11 @@ services:
     image: consul
     restart: always
     deploy:
-      replicas: 1       
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: "256M"   
     depends_on:
       - consul-dc1-node1
     networks:
@@ -39,7 +51,11 @@ services:
     ports:
      - 8500:8500
     deploy:
-      replicas: 1        
+      replicas: 1    
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: "256M"    
     depends_on:
       - consul-dc1-node1
     networks:
@@ -50,6 +66,10 @@ services:
     restart: always
     deploy:
       replicas: 1 
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: "256M"
     depends_on:
       - consul-dc1-node1
     networks:
@@ -59,7 +79,11 @@ services:
     image: consul
     restart: always
     deploy:
-      replicas: 1      
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: "256M"
     depends_on:
       - consul-dc2-node1
     networks:
@@ -69,7 +93,11 @@ services:
     image: consul
     restart: always
     deploy:
-      replicas: 1       
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: "256M"
     depends_on:
       - consul-dc2-node1
     networks:
@@ -82,6 +110,10 @@ services:
      - /var/run/docker.sock:/tmp/docker.sock
     deploy:
       mode: global
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: "256M"
     depends_on:
       - consul-dc1-node4
     networks:
