@@ -13,7 +13,7 @@ services:
       resources:
         limits:
           cpus: '0.1'
-          memory: "256M"
+          memory: "512M"
     networks:
       - consul
     command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --bootstrap-expect=1
@@ -25,7 +25,7 @@ services:
       resources:
         limits:
           cpus: '0.1'
-          memory: "256M"  
+          memory: "512M"  
     depends_on:
       - consul-dc1-node1
     networks:
@@ -39,7 +39,7 @@ services:
       resources:
         limits:
           cpus: '0.1'
-          memory: "256M"   
+          memory: "512M"   
     depends_on:
       - consul-dc1-node1
     networks:
@@ -55,7 +55,7 @@ services:
       resources:
         limits:
           cpus: '0.1'
-          memory: "256M"    
+          memory: "512M"    
     depends_on:
       - consul-dc1-node1
     networks:
@@ -69,7 +69,7 @@ services:
       resources:
         limits:
           cpus: '0.1'
-          memory: "256M"
+          memory: "512M"
     depends_on:
       - consul-dc1-node1
     networks:
@@ -83,7 +83,7 @@ services:
       resources:
         limits:
           cpus: '0.1'
-          memory: "256M"
+          memory: "512M"
     depends_on:
       - consul-dc2-node1
     networks:
@@ -97,7 +97,7 @@ services:
       resources:
         limits:
           cpus: '0.1'
-          memory: "256M"
+          memory: "512M"
     depends_on:
       - consul-dc2-node1
     networks:
@@ -113,7 +113,7 @@ services:
       resources:
         limits:
           cpus: '0.1'
-          memory: "256M"
+          memory: "512M"
     depends_on:
       - consul-dc1-node4
     networks:
