@@ -5,62 +5,6 @@ networks:
       name: consul
 
 services: 
-  consul-dc1-node1:
-    image: consul
-    restart: always
-    deploy:
-      replicas: 1
-      resources:
-        limits:
-          cpus: '0.1'
-          memory: "512M"
-    networks:
-      - consul
-    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --bootstrap-expect=1
-  consul-dc1-node2:
-    image: consul
-    restart: always
-    deploy:
-      replicas: 1
-      resources:
-        limits:
-          cpus: '0.1'
-          memory: "512M"  
-    depends_on:
-      - consul-dc1-node1
-    networks:
-      - consul
-    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --join consul-dc1-node1 -rejoin
-  consul-dc1-node3:
-    image: consul
-    restart: always
-    deploy:
-      replicas: 1
-      resources:
-        limits:
-          cpus: '0.1'
-          memory: "512M"   
-    depends_on:
-      - consul-dc1-node1
-    networks:
-      - consul
-    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --join consul-dc1-node1 -rejoin
-  consul-dc1-node4:
-    image: consul
-    restart: always
-    ports:
-     - 8500:8500
-    deploy:
-      replicas: 1    
-      resources:
-        limits:
-          cpus: '0.1'
-          memory: "512M"    
-    depends_on:
-      - consul-dc1-node1
-    networks:
-      - consul
-    command: agent --server=false --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --join consul-dc1-node4 -rejoin
   consul-dc2-node1:
     image: consul
     restart: always
