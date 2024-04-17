@@ -6,7 +6,7 @@ networks:
 
 services: 
   consul-dc1-node1:
-    image: consul
+    image: hashicorp/consul
     restart: always
     deploy:
       replicas: 1
@@ -14,7 +14,7 @@ services:
       - consul
     command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=local_dc1 --bootstrap-expect=1
   consul-dc1-node2:
-    image: consul
+    image: hashicorp/consul
     restart: always
     deploy:
       replicas: 1
@@ -22,9 +22,9 @@ services:
       - consul-dc1-node1
     networks:
       - consul
-    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=local_dc1 --join consul-dc1-node1 -rejoin
+    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --join consul-dc1-node1 -rejoin
   consul-dc1-node3:
-    image: consul
+    image: hashicorp/consul
     restart: always
     deploy:
       replicas: 1
@@ -32,9 +32,9 @@ services:
       - consul-dc1-node1
     networks:
       - consul
-    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=local_dc1 --join consul-dc1-node1 -rejoin
+    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --join consul-dc1-node1 -rejoin
   consul-dc1-node4:
-    image: consul
+    image: hashicorp/consul
     restart: always
     ports:
      - 8500:8500
@@ -44,7 +44,7 @@ services:
       - consul-dc1-node1
     networks:
       - consul
-    command: agent --server=false --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=local_dc1 --join consul-dc1-node1 -rejoin
+    command: agent --server=false --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --join consul-dc1-node1 -rejoin
   registrator:
     image: gliderlabs/registrator:latest
     restart: always

@@ -6,7 +6,7 @@ networks:
 
 services: 
   consul-dc2-node1:
-    image: consul
+    image: hashicorp/consul
     restart: always
     deploy:
       replicas: 1 
@@ -16,9 +16,9 @@ services:
           memory: "512M"
     networks:
       - consul
-    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=local_dc2 --bootstrap-expect=1
+    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc2 --bootstrap-expect=1
   consul-dc2-node2:
-    image: consul
+    image: hashicorp/consul
     restart: always
     deploy:
       replicas: 1
@@ -30,9 +30,9 @@ services:
       - consul-dc2-node1
     networks:
       - consul
-    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=local_dc2 --join consul-dc2-node1 -rejoin
+    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc2 --join consul-dc2-node1 -rejoin
   consul-dc2-node3:
-    image: consul
+    image: hashicorp/consul
     restart: always
     deploy:
       replicas: 1
@@ -44,4 +44,4 @@ services:
       - consul-dc2-node1
     networks:
       - consul
-    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=local_dc2 --join consul-dc2-node1 -rejoin
+    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc2 --join consul-dc2-node1 -rejoin
