@@ -12,7 +12,7 @@ services:
       replicas: 1
     networks:
       - consul
-    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=local_dc1 --bootstrap-expect=1
+    command: agent --server=true --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --bootstrap-expect=1
   consul-dc1-node2:
     image: hashicorp/consul
     restart: always
