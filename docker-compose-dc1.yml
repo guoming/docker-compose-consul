@@ -45,19 +45,3 @@ services:
     networks:
       - consul
     command: agent --server=false --client=0.0.0.0 -ui -hcl='acl {enabled=false}' -datacenter=dc1 --join consul-dc1-node1 -rejoin
-  registrator:
-    image: gliderlabs/registrator:latest
-    restart: always
-    volumes:
-      - /var/run/docker.sock:/tmp/docker.sock
-    deploy:
-      mode: global
-      resources:
-        limits:
-          cpus: '0.1'
-          memory: "512M"
-    depends_on:
-        - consul-dc1-node4
-    networks:
-        - consul
-    command: -cleanup -resync=10 --internal consul://consul-dc1-node4:8500
