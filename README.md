@@ -29,8 +29,9 @@ Policies:
    00000000-0000-0000-0000-000000000001 - global-management
 
 将令牌 SecretID 保存到环境变量 MANAGEMENT_TOKEN
+
 ``` sh
-export MANAGEMENT_TOKEN=2bc8d0ba-fc4b-19c1-0cd0-0ed22bada72f
+export MANAGEMENT_TOKEN=xxx
 ```
 
 ### 4.2. 创建策略
